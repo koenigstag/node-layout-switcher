@@ -27,14 +27,14 @@ const KeyNames = {
 function matchesKeybinding(
   keyBinding: string,
   e: IGlobalKeyEvent,
-  isDown: IGlobalKeyDownMap
+  isDown: IGlobalKeyDownMap,
 ): boolean {
   if (!e.name) return false;
 
   const requiredKeys = keyBinding
     .toUpperCase()
     .split('+')
-    .map((k) => k.trim());
+    .map(k => k.trim());
 
   const checkRequiresKey = (key: string) =>
     requiredKeys.includes(key.toUpperCase());
@@ -99,29 +99,29 @@ function matchesKeybinding(
 
   const requiresOtherKeys = requiredKeys
     .filter(
-      (s) =>
+      s =>
         // exclude either CTRL or LEFT CTRL
         !s.includes(KeyNames.CTRL) &&
         !s.includes(KeyNames.SHIFT) &&
         !s.includes(KeyNames.ALT) &&
-        !s.includes(KeyNames.META)
+        !s.includes(KeyNames.META),
     )
     .filter(Boolean)
-    .map((k) => k.toUpperCase());
+    .map(k => k.toUpperCase());
 
   if (!requiresOtherKeys.length) {
     return true;
   }
 
   const pressedKeys = Object.entries(isDown)
-    .filter(([_key, val]) => Boolean(val))
+    .filter(([, val]) => Boolean(val))
     .map(([key]) => key.toUpperCase());
 
-  return requiresOtherKeys.every((key) => pressedKeys.includes(key));
+  return requiresOtherKeys.every(key => pressedKeys.includes(key));
 }
 
 export function registerListener(
-  bindings: Record<string, IGlobalKeyListener>
+  bindings: Record<string, IGlobalKeyListener>,
 ): void {
   gkl.addListener((e: IGlobalKeyEvent, isDown: IGlobalKeyDownMap) => {
     if (!e.name) return;
@@ -149,7 +149,7 @@ export function initKeyBindings(): void {
 
     if (settings.description) {
       console.log(
-        `- ${settings.description?.replace('${keyBinding}', keyBinding)}`
+        `- ${settings.description?.replace('${keyBinding}', keyBinding)}`,
       );
     }
   }

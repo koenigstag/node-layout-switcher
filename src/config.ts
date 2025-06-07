@@ -9,7 +9,7 @@ export const configPath = configPathEnv.includes('.')
 
 export const configDirectory = path.resolve(
   __dirname,
-  path.dirname(configPath)
+  path.dirname(configPath),
 );
 
 const config = require(configPath) as Config;

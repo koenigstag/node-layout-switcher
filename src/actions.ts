@@ -13,7 +13,7 @@ const actions = {
   convertSelectedText: async () => {
     if (uniq(selectedLayoutsList).length !== 2) {
       console.error(
-        `Invalid number of selected layouts. Expected 2, got ${selectedLayoutsList.length}.`
+        `Invalid number of selected layouts. Expected 2, got ${selectedLayoutsList.length}.`,
       );
       return;
     }
@@ -29,20 +29,20 @@ const actions = {
       return;
     }
 
-    const inverseLayoutKey = selectedLayoutsList.find((l) => l !== layoutKey);
+    const inverseLayoutKey = selectedLayoutsList.find(l => l !== layoutKey);
 
     if (!inverseLayoutKey) {
       console.error(
         `No inverse layout found for ${layoutKey}. Available layouts: ${selectedLayoutsList.join(
-          ', '
-        )}`
+          ', ',
+        )}`,
       );
       return;
     }
 
     if (layoutKey === inverseLayoutKey) {
       console.warn(
-        `Language is the same (${layoutKey} == ${inverseLayoutKey}). No transformation will be applied.`
+        `Language is the same (${layoutKey} == ${inverseLayoutKey}). No transformation will be applied.`,
       );
       return;
     }
@@ -56,13 +56,13 @@ const actions = {
       original,
       originDictionary,
       inverseDictionary,
-      charToKeyMap
+      charToKeyMap,
     );
 
     await pasteText(convertedText);
 
     console.log(
-      `[✓] Transformed (${layoutKey} → ${inverseLayoutKey}): ${original} → ${convertedText}`
+      `[✓] Transformed (${layoutKey} → ${inverseLayoutKey}): ${original} → ${convertedText}`,
     );
   },
 } as const;
