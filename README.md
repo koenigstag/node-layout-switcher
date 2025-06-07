@@ -1,5 +1,11 @@
 # Node Layout Switcher
 
+[![CI](https://github.com/koenigstag/node-layout-switcher/workflows/CI/badge.svg)](https://github.com/koenigstag/node-layout-switcher/actions)
+[![Security Check](https://github.com/koenigstag/node-layout-switcher/workflows/Security%20Check/badge.svg)](https://github.com/koenigstag/node-layout-switcher/actions)
+[![Release](https://github.com/koenigstag/node-layout-switcher/workflows/Release/badge.svg)](https://github.com/koenigstag/node-layout-switcher/actions)
+[![npm version](https://badge.fury.io/js/node-layout-switcher.svg)](https://badge.fury.io/js/node-layout-switcher)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Node.js utility for automatic keyboard layout switching and text conversion between different languages. Supports English, Russian, Ukrainian, German, French, Czech and Polish layouts with hotkey-based text replacement.
 
 The idea was inspired by the [Punto Switcher](https://ru.wikipedia.org/wiki/Punto_Switcher) application, but this implementation is built using Node.js and is cross-platform compatible.
@@ -193,6 +199,93 @@ npm start
 
 - Node.js 18+
 - Windows/macOS/Linux
+
+## Development
+
+### Getting Started
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/koenigstag/node-layout-switcher.git
+   cd node-layout-switcher
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Build the project**:
+   ```bash
+   npm run build
+   ```
+
+4. **Run tests**:
+   ```bash
+   npm run test:full
+   ```
+
+### Development Scripts
+
+- `npm run build` - Build TypeScript to JavaScript
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run test:full` - Run all tests
+- `npm run ci:local` - Run local CI simulation
+- `npm run check` - Run full quality check (lint + format + build)
+
+### Code Quality
+
+This project uses:
+- **TypeScript** for type safety
+- **ESLint** for code linting
+- **Prettier** for code formatting
+- **Automated testing** with comprehensive test suites
+- **GitHub Actions** for CI/CD
+
+### Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Run quality checks: `npm run ci:local`
+5. Commit your changes: `git commit -m 'feat: add amazing feature'`
+6. Push to the branch: `git push origin feature/amazing-feature`
+7. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+### Continuous Integration
+
+The project uses GitHub Actions for:
+- **Automated testing** on multiple Node.js versions (18, 20, 22)
+- **Code quality checks** (ESLint, Prettier, TypeScript compilation)
+- **Security audits** and dependency updates
+- **Automated releases** when tags are pushed
+- **Pull request validation** with comprehensive checks
+
+### Release Process
+
+To create a new release:
+```bash
+# Patch release (bug fixes)
+npm run release:patch
+
+# Minor release (new features)
+npm run release:minor
+
+# Major release (breaking changes)
+npm run release:major
+```
+
+This will automatically:
+1. Update package.json version
+2. Create a git tag
+3. Push changes to GitHub
+4. Trigger automated release workflow
+5. Publish to npm (if configured)
+
+For detailed setup instructions, see [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md).
 
 ## License
 
