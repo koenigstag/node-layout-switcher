@@ -143,13 +143,19 @@ async function runComprehensiveTests() {
     test('ґрунт → uheyn', toEn === 'uheyn');
     test('uheyn → грунт (not ґрунт)', backToUk === 'грунт');
 
-    // Test 9: All dictionaries have altCombinations field
+    // Test 9: Dictionary structure validation
     console.log('\n📋 Testing dictionary structure...');
 
     languages.forEach(lang => {
       const dict = dictionaries[lang];
-      test(`${lang} has altCombinations field`, dict.hasOwnProperty('altCombinations'));
-      test(`${lang} altCombinations is object`, typeof dict.altCombinations === 'object');
+      
+      // Russian layout intentionally has no Alt combinations (uses only standard Cyrillic)
+      if (lang === 'ru') {
+        test(`${lang} has no altCombinations (correct architecture)`, !dict.hasOwnProperty('altCombinations') || Object.keys(dict.altCombinations || {}).length === 0);
+      } else {
+        test(`${lang} has altCombinations field`, dict.hasOwnProperty('altCombinations'));
+        test(`${lang} altCombinations is object`, typeof dict.altCombinations === 'object');
+      }
     });
 
     // Test 10: Performance test
