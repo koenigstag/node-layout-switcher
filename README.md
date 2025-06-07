@@ -58,7 +58,7 @@ This project is open for contributions! If you have ideas for new features, sugg
 
 1. Download the latest release from [Releases](../../releases)
 2. Extract the archive. Enshure copying `assets` folder with dictionaries and config.json file
-3. Config the application by editing `assets/config.json` if needed
+3. Config the application by editing [`assets/config.json`](assets/config.json) if needed
 4. Run the executable file (e.g., `node-layout-switcher.exe` on Windows, `node-layout-switcher` on macOS/Linux)
 
 ### Build from source:
@@ -78,7 +78,7 @@ npm install
 npm run build
 ```
 
-4. Configure the application by editing `assets/config.json` if needed
+4. Configure the application by editing [`assets/config.json`](assets/config.json) if needed
 
 5. Start the built application:
 ```bash
@@ -113,7 +113,7 @@ npm start
       ```
 
 ### Example Configuration
-Here is a basic example of a valid `config.json` file that supports English and Russian languages with QWERTY layout:
+Here is a basic example of a valid [`config.json`](assets/config.json) file that supports English and Russian languages with QWERTY layout:
 
 ```json
 {
@@ -139,16 +139,16 @@ Here is a basic example of a valid `config.json` file that supports English and 
 
 Each language has its own dictionary file in `assets/dictionaries/` that maps keyboard keys to characters:
 
-- `en.qwerty.json` - English QWERTY layout
-- `en.dvorak.json` - English DVORAK layout (example provided)
-- `ru.qwerty.json` - Russian ЙЦУКЕН layout
-- `uk.qwerty.json` - Ukrainian ЙЦУКЕН layout
-- `de.qwertz.json` - German QWERTZ layout
-- `fr.azerty.json` - French AZERTY layout
-- `cz.qwertz.json` - Czech QWERTZ layout
-- `pl.qwerty.json` - Polish QWERTY layout
+- [`en.qwerty.json`](assets/dictionaries/en.qwerty.json) - English QWERTY layout
+- [`en.dvorak.json`](assets/dictionaries/en.dvorak.json) - English DVORAK layout (example provided)
+- [`ru.qwerty.json`](assets/dictionaries/ru.qwerty.json) - Russian ЙЦУКЕН layout
+- [`uk.qwerty.json`](assets/dictionaries/uk.qwerty.json) - Ukrainian ЙЦУКЕН layout
+- [`de.qwertz.json`](assets/dictionaries/de.qwertz.json) - German QWERTZ layout
+- [`fr.azerty.json`](assets/dictionaries/fr.azerty.json) - French AZERTY layout
+- [`cz.qwertz.json`](assets/dictionaries/cz.qwertz.json) - Czech QWERTZ layout
+- [`pl.qwerty.json`](assets/dictionaries/pl.qwerty.json) - Polish QWERTY layout
 
-#### Contribution is welcome to add more languages and layouts! Just create a new dictionary file or edit an existing one in the `dictionaries` folder and update the `config.json` accordingly.
+#### Contribution is welcome to add more languages and layouts! Just create a new dictionary file or edit an existing one in the [`dictionaries`](assets/dictionaries/) folder and update the [`config.json`](assets/config.json) accordingly.
 
 ## Development
 
@@ -304,7 +304,7 @@ TL;DR: THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND
 **Text not converting:**
 - Ensure the program is running and monitoring keybindings
 - Check log output for errors
-- Verify the language is supported in `config.json`
+- Verify the language is supported in [`config.json`](assets/config.json)
 - Check that the dictionary file exists for the target language
 - Ensure the regex pattern correctly matches the text
 
