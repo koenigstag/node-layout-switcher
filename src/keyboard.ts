@@ -4,10 +4,93 @@ import {
   IGlobalKeyEvent,
   IGlobalKeyListener,
 } from 'node-global-key-listener';
+import path from 'path';
+import fs from 'fs';
 import config from './config';
 import actions from './actions';
 
-const gkl = new GlobalKeyboardListener();
+declare global {
+  namespace NodeJS {
+    interface Process {
+      pkg?: unknown;
+    }
+  }
+}
+
+// For pkg executables, detect if we're in a packaged environment
+const isPkg = !!process.pkg;
+
+// Configure the GlobalKeyboardListener for pkg
+const gklConfig = isPkg
+  ? (() => {
+      const execDir = path.dirname(process.execPath);
+      switch (process.platform) {
+        case 'win32': {
+          const winServerPath = path.resolve(execDir, 'WinKeyServer.exe');
+          // console.log(`🔍 Looking for WinKeyServer.exe at: ${winServerPath}`);
+          if (!fs.existsSync(winServerPath)) {
+            console.warn(`⚠️  WinKeyServer.exe not found at: ${winServerPath}`);
+            console.warn(
+              `📁 Available files in ${execDir}:`,
+              fs.readdirSync(execDir),
+            );
+          } else {
+            // console.log(`✅ Found WinKeyServer.exe`);
+          }
+          return {
+            windows: {
+              serverPath: winServerPath,
+            },
+          };
+        }
+        case 'linux': {
+          const linuxServerPath = path.resolve(execDir, 'X11KeyServer');
+          // console.log(`🔍 Looking for X11KeyServer at: ${linuxServerPath}`);
+          if (!fs.existsSync(linuxServerPath)) {
+            console.warn(`⚠️  X11KeyServer not found at: ${linuxServerPath}`);
+          } else {
+            // console.log(`✅ Found X11KeyServer`);
+          }
+          return {
+            linux: {
+              serverPath: linuxServerPath,
+            },
+          };
+        }
+        case 'darwin': {
+          const macServerPath = path.resolve(execDir, 'MacKeyServer');
+          // console.log(`🔍 Looking for MacKeyServer at: ${macServerPath}`);
+          if (!fs.existsSync(macServerPath)) {
+            console.warn(`⚠️  MacKeyServer not found at: ${macServerPath}`);
+          } else {
+            // console.log(`✅ Found MacKeyServer`);
+          }
+          return {
+            mac: {
+              serverPath: macServerPath,
+            },
+          };
+        }
+        default:
+          console.warn(`⚠️  Unsupported platform: ${process.platform}`);
+          return {};
+      }
+    })()
+  : {};
+
+// console.log(
+//   `🔧 GlobalKeyboardListener config:`,
+//   JSON.stringify(gklConfig, null, 2),
+// );
+
+let gkl: GlobalKeyboardListener;
+try {
+  gkl = new GlobalKeyboardListener(gklConfig);
+  // console.log(`✅ GlobalKeyboardListener initialized successfully`);
+} catch (error) {
+  console.error(`❌ Failed to initialize GlobalKeyboardListener:`, error);
+  process.exit(1);
+}
 
 const KeyNames = {
   CTRL: 'CTRL',
@@ -123,20 +206,32 @@ function matchesKeybinding(
 export function registerListener(
   bindings: Record<string, IGlobalKeyListener>,
 ): void {
-  gkl.addListener((e: IGlobalKeyEvent, isDown: IGlobalKeyDownMap) => {
-    if (!e.name) return;
+  try {
+    gkl.addListener((e: IGlobalKeyEvent, isDown: IGlobalKeyDownMap) => {
+      if (!e.name) return;
 
-    if (e.state === 'DOWN') {
-      for (const [bind, handler] of Object.entries(bindings)) {
-        if (matchesKeybinding(bind, e, isDown)) {
-          handler(e, isDown);
+      if (e.state === 'DOWN') {
+        for (const [bind, handler] of Object.entries(bindings)) {
+          if (matchesKeybinding(bind, e, isDown)) {
+            console.log(`🎹 Key binding triggered: ${bind}`);
+            try {
+              handler(e, isDown);
+            } catch (error) {
+              console.error(`❌ Error executing handler for ${bind}:`, error);
+            }
+          }
         }
       }
-    }
-  });
+    });
+    console.log(`✅ Key listener registered successfully`);
+  } catch (error) {
+    console.error(`❌ Failed to register key listener:`, error);
+    throw error;
+  }
 }
 
 export function initKeyBindings(): void {
+  console.log(`🔧 Initializing key bindings...`);
   const bindings: Record<string, IGlobalKeyListener> = {};
 
   for (const [keyBinding, settings] of Object.entries(config.keyBindings)) {
@@ -144,7 +239,12 @@ export function initKeyBindings(): void {
       const action = settings.action;
       const handler = actions[action as keyof typeof actions];
 
-      handler?.();
+      if (handler) {
+        console.log(`🎯 Executing action: ${action}`);
+        handler();
+      } else {
+        console.warn(`⚠️  No handler found for action: ${action}`);
+      }
     };
 
     if (settings.description) {
@@ -154,5 +254,15 @@ export function initKeyBindings(): void {
     }
   }
 
-  registerListener(bindings);
+  console.log(
+    `📋 Configured ${Object.keys(bindings).length} key binding(s):`,
+    Object.keys(bindings),
+  );
+
+  try {
+    registerListener(bindings);
+  } catch (error) {
+    console.error(`❌ Failed to initialize key bindings:`, error);
+    console.error(`💡 Keyboard functionality will not be available`);
+  }
 }

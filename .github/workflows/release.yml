@@ -34,9 +34,39 @@ jobs:
       - name: Build for release
         run: npm run build
 
-      - name: Create Release Archive
+      - name: Build executables
+        run: npm run build:exe:all
+
+      - name: Copy assets and keyservers for Unix
         run: |
-          tar -czf node-layout-switcher-${{ github.ref_name }}.tar.gz \
+          cp -r assets build/
+          cp node_modules/node-global-key-listener/bin/WinKeyServer.exe build/ || true
+          cp node_modules/node-global-key-listener/bin/X11KeyServer build/ || true  
+          cp node_modules/node-global-key-listener/bin/MacKeyServer build/ || true
+
+      - name: Create Windows Release Archive
+        run: |
+          mkdir -p release-windows
+          cp build/node-layout-switcher-win.exe release-windows/
+          cp -r build/assets release-windows/
+          cp build/WinKeyServer.exe release-windows/ || true
+          cp README.md LICENSE release-windows/
+          cd release-windows && zip -r ../node-layout-switcher-${{ github.ref_name }}-windows.zip .
+
+      - name: Create Unix Release Archive
+        run: |
+          mkdir -p release-unix
+          cp build/node-layout-switcher-linux release-unix/
+          cp build/node-layout-switcher-macos release-unix/
+          cp -r build/assets release-unix/
+          cp build/X11KeyServer release-unix/ || true
+          cp build/MacKeyServer release-unix/ || true
+          cp README.md LICENSE release-unix/
+          tar -czf node-layout-switcher-${{ github.ref_name }}-unix.tar.gz -C release-unix .
+
+      - name: Create Source Archive
+        run: |
+          tar -czf node-layout-switcher-${{ github.ref_name }}-source.tar.gz \
             dist/ \
             assets/ \
             package.json \
@@ -47,7 +77,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            node-layout-switcher-${{ github.ref_name }}.tar.gz
+            node-layout-switcher-${{ github.ref_name }}-windows.zip
+            node-layout-switcher-${{ github.ref_name }}-unix.tar.gz
+            node-layout-switcher-${{ github.ref_name }}-source.tar.gz
           generate_release_notes: true
           draft: false
           prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}

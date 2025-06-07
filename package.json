@@ -29,7 +29,16 @@
     "deps:update": "npm update",
     "release:patch": "npm version patch && git push && git push --tags",
     "release:minor": "npm version minor && git push && git push --tags",
-    "release:major": "npm version major && git push && git push --tags"
+    "release:major": "npm version major && git push && git push --tags",
+    "pkg:exe": "npm run build && pkg dist/index.js --targets node18-win-x64 --output build/node-layout-switcher-win-x64.exe",
+    "pkg:exe:all": "npm run build && pkg dist/index.js --targets node18-win-x64,node18-linux-x64,node18-macos-x64 --output build/node-layout-switcher",
+    "prepkg:exe": "if not exist build mkdir build",
+    "prepkg:exe:all": "if not exist build mkdir build",
+    "postpkg:exe": "npm run copy:assets && npm run copy:keyserver",
+    "postpkg:exe:all": "npm run copy:assets && npm run copy:keyserver:all",
+    "copy:assets": "xcopy assets build\\assets /E /I /Y",
+    "copy:keyserver": "copy node_modules\\node-global-key-listener\\bin\\WinKeyServer.exe build\\ /Y",
+    "copy:keyserver:all": "copy node_modules\\node-global-key-listener\\bin\\WinKeyServer.exe build\\ /Y && copy node_modules\\node-global-key-listener\\bin\\X11KeyServer build\\ /Y && copy node_modules\\node-global-key-listener\\bin\\MacKeyServer build\\ /Y"
   },
   "keywords": [
     "keyboard",
@@ -57,9 +66,23 @@
     "@typescript-eslint/parser": "^8.33.1",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.1",
-    "jiti": "^2.4.2",
+    "eslint-plugin-prettier": "^5.4.1",    "jiti": "^2.4.2",
+    "pkg": "^5.8.1",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3"
+  },  "pkg": {
+    "assets": [
+      "assets/**/*",
+      "node_modules/node-global-key-listener/bin/**/*"
+    ],
+    "scripts": [
+      "assets/**/*"
+    ],
+    "targets": [
+      "node18-win-x64",
+      "node18-linux-x64", 
+      "node18-macos-x64"
+    ],
+    "outputPath": "build"
   }
 }

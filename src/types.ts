@@ -23,7 +23,6 @@ export type NewLayoutDict = {
 };
 
 export type Config = {
-  defaultLang: Lang;
   selectedTuple: [Lang, Lang];
   langRegexps: Record<Lang, string>;
   dictionaryPaths: Record<Lang, string>;

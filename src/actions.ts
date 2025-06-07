@@ -62,7 +62,7 @@ const actions = {
     await pasteText(convertedText);
 
     console.log(
-      `[✓] Transformed (${layoutKey} → ${inverseLayoutKey}): ${original} → ${convertedText}`,
+      `✅ Transformed (${layoutKey} → ${inverseLayoutKey}): ${original} → ${convertedText}`,
     );
   },
 } as const;

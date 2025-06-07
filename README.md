@@ -27,9 +27,66 @@ The idea was inspired by the [Punto Switcher](https://ru.wikipedia.org/wiki/Punt
 
 ## Usage
 
+### Basic Usage
+
 1. Select text in any input field using your mouse or keyboard
 2. Press hotkey to convert the text between layouts (current layout detected automatically based on the selected text)
 3. The selected text will be replaced with the converted text in the same input field
+
+### Configuration
+
+The application supports flexible configuration through `config.json` files. The application searches for configuration files in the following order:
+
+1. **Environment variable**: `CONFIG_PATH` (full path to config file)
+2. **Current directory**: `./config.json` (next to executable)
+3. **User home**: `~/.node-layout-switcher/config.json`
+4. **Built-in**: `./assets/config.json` (default)
+
+#### Creating Custom Configuration
+
+**Option 1: Create config in current directory**
+```bash
+# For executable files
+./node-layout-switcher --init-config
+
+# For npm installation
+npx node-layout-switcher --init-config
+```
+
+**Option 2: Create config in user home directory**
+```bash
+# For executable files
+./node-layout-switcher --init-user-config
+
+# For npm installation
+npx node-layout-switcher --init-user-config
+```
+
+**Option 3: Using environment variable**
+```bash
+# Set custom config path
+export CONFIG_PATH="/path/to/your/config.json"
+./node-layout-switcher
+```
+
+#### Configuration Structure
+
+The `config.json` file allows you to customize:
+- **Key bindings**: Change hotkey combinations
+- **Actions**: Modify what happens when keys are pressed
+- **Language priority**: Set conversion preferences
+
+Example configuration:
+```json
+{
+  "keyBindings": {
+    "CTRL+SHIFT+P": {
+      "action": "convertSelectedText",
+      "description": "Press ${keyBinding} to convert selected text."
+    }
+  }
+}
+```
 
 ## Example
 
@@ -57,13 +114,13 @@ The application supports special characters through Alt combinations for various
 - `Alt + U` → `ґ` (G with upturn)
 - `Alt + Shift + U` → `Ґ` (Capital G with upturn)
 
-### 🇩🇪 German  
+### 🇩🇪 German
 - `Alt + S` → `ß` (Eszett/Sharp S)
 - `Alt + E` → `€` (Euro symbol)
 
 ### 🇵🇱 Polish
 - `Alt + A` → `ą`, `Alt + C` → `ć`, `Alt + E` → `ę`
-- `Alt + L` → `ł`, `Alt + N` → `ń`, `Alt + O` → `ó`  
+- `Alt + L` → `ł`, `Alt + N` → `ń`, `Alt + O` → `ó`
 - `Alt + S` → `ś`, `Alt + Z` → `ź`, `Alt + X` → `ż`
 - Capital variants with `Alt + Shift + [Letter]`
 
@@ -103,36 +160,68 @@ npm test
 
 ## Installation
 
-### Download ready-to-use binary:
+### Option 1: Download Pre-built Executables (Recommended)
 
-1. Download the latest release from [Releases](../../releases)
-2. Extract the archive. Enshure copying `assets` folder with dictionaries and config.json file
-3. Config the application by editing [`assets/config.json`](assets/config.json) if needed
-4. Run the executable file (e.g., `node-layout-switcher.exe` on Windows, `node-layout-switcher` on macOS/Linux)
+1. Download the latest release archive from [Releases](../../releases):
+   - **Windows**: `node-layout-switcher-vX.X.X-windows.zip`
+   - **macOS/Linux**: `node-layout-switcher-vX.X.X-unix.tar.gz`
 
-### Build from source:
-1. Clone the repository using Git:
+2. Extract the archive:
+   - **Windows**: Right-click the ZIP file and select "Extract All..." or use 7-Zip
+   - **macOS/Linux**: `tar -xzf node-layout-switcher-vX.X.X-unix.tar.gz`
+
+3. Navigate to the extracted folder:
+   ```bash
+   cd node-layout-switcher-vX.X.X
+   ```
+
+4. Run the executable:
+   - **Windows**: Double-click `node-layout-switcher-win.exe` or run in cmd/PowerShell
+   - **Linux**: `./node-layout-switcher-linux`
+   - **macOS**: `./node-layout-switcher-macos`
+
+5. Configure the application by editing `assets/config.json` if needed
+
+### Option 2: Install via NPM
+
 ```bash
-git clone https://github.com/koenigstag/node-layout-switcher.git
-cd node-layout-switcher
+npm install -g node-layout-switcher
+npx node-layout-switcher
 ```
+
+### Option 3: Build from Source
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/koenigstag/node-layout-switcher.git
+   cd node-layout-switcher
+   ```
 
 2. Install dependencies:
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
 3. Build the project:
-```bash
-npm run build
-```
+   ```bash
+   npm run build
+   ```
 
-4. Configure the application by editing [`assets/config.json`](assets/config.json) if needed
+4. Configure the application by editing `assets/config.json` if needed
 
-5. Start the built application:
-```bash
-npm start
-```
+5. Run the application:
+   ```bash
+   npm start
+   ```
+
+6. (Optional) Build executable for your platform:
+   ```bash
+   # Windows .exe
+   npm run build:exe
+   
+   # All platforms
+   npm run build:exe:all
+   ```
 
 ## Configuration
 
