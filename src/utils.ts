@@ -1,4 +1,3 @@
-import clipboardy from 'clipboardy';
 import { keyboard, Key } from '@nut-tree-fork/nut-js';
 import { CharMap, Lang, NewLayoutDict } from './types';
 import config, { configDirectory } from './config';
@@ -6,6 +5,12 @@ import { selectedLayoutsList } from './constants';
 import fs from 'fs';
 import path from 'path';
 import enQwertyLayout from '../assets/dictionaries/en.qwerty.json';
+
+// Dynamic import clipboardy (ES module) for Node v18.x compatibility
+async function getClipboardy() {
+  const clipboardy = await import('clipboardy');
+  return clipboardy.default;
+}
 
 export function buildCharToKey(layout: NewLayoutDict, disableAlt?: boolean) {
   const map: CharMap = {};
@@ -207,6 +212,7 @@ export async function copyText(): Promise<string> {
   await new Promise(resolve => setTimeout(resolve, 50));
   await keyboard.releaseKey(Key.C, Key.LeftControl);
 
+  const clipboardy = await getClipboardy();
   const text = await clipboardy.read();
 
   return text.trim();
@@ -214,6 +220,7 @@ export async function copyText(): Promise<string> {
 
 export async function pasteText(text?: string) {
   if (text) {
+    const clipboardy = await getClipboardy();
     await clipboardy.write(text);
   }
 
