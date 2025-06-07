@@ -2,7 +2,7 @@ import { Lang } from './types';
 import { uniq } from './utils';
 import config from './config';
 
-export const version = '1.1.0';
+export const version = '1.2.0';
 
 export const selectedLayoutsList: [Lang, Lang] = uniq(
   config.selectedTuple,
