@@ -89,6 +89,19 @@ export async function getDictionary(lang: Lang): Promise<NewLayoutDict> {
 }
 
 export function detectLayoutKey(text: string): Lang | undefined {
+  // Define deterministic language priority order
+  // More specific languages (with unique characters) should come first
+  // to avoid false matches with more generic patterns
+  const languagePriority: Lang[] = [
+    'uk', // Ukrainian (has unique characters: і, ї, є, ґ)
+    'ru', // Russian (has unique character: ё)
+    'cz', // Czech (has many unique diacritics)
+    'pl', // Polish (has unique characters with diacritics)
+    'fr', // French (has unique diacritics)
+    'de', // German (has unique characters: ä, ö, ü, ß)
+    'en', // English (most generic, should be last)
+  ];
+
   const regexpsForLangs: Record<Lang, RegExp> = selectedLayoutsList.reduce(
     (acc, lang) => {
       acc[lang] = new RegExp(config.langRegexps[lang], 'i');
@@ -97,9 +110,13 @@ export function detectLayoutKey(text: string): Lang | undefined {
     {} as Record<Lang, RegExp>,
   );
 
-  for (const [lang, regexp] of Object.entries(regexpsForLangs)) {
-    if (regexp.test(text)) {
-      return lang as Lang;
+  // Check languages in deterministic priority order
+  for (const lang of languagePriority) {
+    // Only check if this language is in selectedLayoutsList
+    if (selectedLayoutsList.includes(lang) && regexpsForLangs[lang]) {
+      if (regexpsForLangs[lang].test(text)) {
+        return lang;
+      }
     }
   }
 
