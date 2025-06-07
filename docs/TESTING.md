@@ -5,12 +5,12 @@ The project includes comprehensive testing to ensure keyboard layout switching w
 ## Test Scripts
 
 - `npm test` - Run comprehensive test suite (primary test)
+- `npm run test:dictionaries` - Dictionary validation tests
 - `npm run test:comprehensive` - Full comprehensive test suite
 - `npm run test:conversion` - Basic conversion and reversibility tests
-- `npm run test:ukrainian` - Specialized Ukrainian real-world scenarios
-- `npm run test:full` - Run all main tests (comprehensive + conversion + Ukrainian)
-- `npm run test:dictionaries` - Dictionary validation tests
-- `npm run test:integration` - Integration tests
+- `npm run test:alt-combinations` - Alt combinations for all languages
+- `npm run test:smoke` - Quick smoke test (basic functionality check)
+- `npm run test:full` - Run all main tests (dictionary validation + comprehensive + conversion + alt-combinations)
 
 ## Test Coverage
 
@@ -33,12 +33,24 @@ The project includes comprehensive testing to ensure keyboard layout switching w
 - 🎯 **Step-by-step conversion validation** with detailed output
 - 🔍 **Regression testing** for conversion accuracy
 
-### Ukrainian Real-World Test (`test-ukrainian-real-world.js`)
-- 🎯 Real Ukrainian words with "ґ" (ґанок, ґудзик, ґрунт, etc.)
-- 🔄 Detailed round-trip testing: Ukrainian → English → Ukrainian
-- 🌍 Cross-language testing: Ukrainian → Russian → Ukrainian
-- 📝 Mixed Ukrainian text scenarios with "ґ" in context
-- 🎯 Specific "ґ" behavior validation in various contexts
+### Alt Combinations Test (`test-alt-combinations.js`)
+- 🇺🇦 **Ukrainian words** with "ґ" (ґанок, ґудзик, ґрунт, etc.)
+- 🇩🇪 **German words** with "ß" and "€" (Straße, weiß, 10€, etc.)
+- 🇵🇱 **Polish words** with special characters (łódź, żółć, ćma, etc.)
+- 🇫🇷 **French words** with accents (français, château, être, etc.)
+- 🇨🇿 **Czech words** with diacritics (český, přítel, děkuji, etc.)
+- 🇷🇺 **Russian words** with Ukrainian-style characters (Євро, інтернет, etc.)
+- 🔄 **Round-trip testing** for all Alt combinations
+- 🎯 **Cross-language conversion** validation
+
+### Smoke Test (`test-smoke.js`)
+- 🚀 **Quick functionality check** - fast verification that core features work
+- 📚 **Dictionary loading** - validates that dictionary files load correctly
+- 🔤 **Character mapping** - tests buildCharToKey function
+- 🔄 **Basic conversion** - EN↔RU text conversion test
+- 🔍 **Language detection** - tests detectLayoutKey function
+- 🌍 **Supported languages** - displays available language layouts
+- ⚡ **Fast execution** - ideal for CI/CD and quick development checks
 
 ## Running Tests
 
@@ -57,14 +69,14 @@ npm run test:full
 # Test basic conversions and reversibility
 npm run test:conversion
 
-# Test Ukrainian real-world scenarios
-npm run test:ukrainian
+# Test Alt combinations for all languages
+npm run test:alt-combinations
 
 # Test dictionary validation
 npm run test:dictionaries
 
-# Test integration
-npm run test:integration
+# Quick smoke test
+npm run test:smoke
 ```
 
 ## Test Development

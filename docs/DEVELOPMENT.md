@@ -76,7 +76,7 @@ For detailed testing information, see [Testing Documentation](TESTING.md).
 
 - `npm test` - Run comprehensive test suite
 - `npm run test:full` - Run all tests including specialized tests
-- `npm run test:ukrainian` - Run Ukrainian real-world scenarios
+- `npm run test:alt-combinations` - Run Alt combinations tests for all languages
 - `npm run test:comprehensive` - Run comprehensive test suite
 - `npm run test:conversion` - Run basic conversion tests
 - `npm run test:dictionaries` - Run dictionary validation tests
