@@ -49,8 +49,57 @@ These languages and layouts are supported for text conversion:
 | Czech    | ✅     | ❌     |
 | Polish   | ✅     | ❌     |
 
-## Contribution
-This project is open for contributions! If you have ideas for new features, suggestions, improvements, or bug fixes, feel free to submit a pull request or open an issue.
+## Special Characters Support (Alt Combinations)
+
+The application supports special characters through Alt combinations for various languages:
+
+### 🇺🇦 Ukrainian
+- `Alt + U` → `ґ` (G with upturn)
+- `Alt + Shift + U` → `Ґ` (Capital G with upturn)
+
+### 🇩🇪 German  
+- `Alt + S` → `ß` (Eszett/Sharp S)
+- `Alt + E` → `€` (Euro symbol)
+
+### 🇵🇱 Polish
+- `Alt + A` → `ą`, `Alt + C` → `ć`, `Alt + E` → `ę`
+- `Alt + L` → `ł`, `Alt + N` → `ń`, `Alt + O` → `ó`  
+- `Alt + S` → `ś`, `Alt + Z` → `ź`, `Alt + X` → `ż`
+- Capital variants with `Alt + Shift + [Letter]`
+
+### 🇫🇷 French
+- `Alt + A` → `à`, `Alt + E` → `è`, `Alt + U` → `ù`
+- `Alt + I` → `î`, `Alt + O` → `ô`, `Alt + C` → `ç`
+
+### 🇨🇿 Czech
+- `Alt + A` → `á`, `Alt + E` → `é`, `Alt + I` → `í`
+- `Alt + O` → `ó`, `Alt + U` → `ú`, `Alt + C` → `č`
+- `Alt + D` → `ď`, `Alt + N` → `ň`, `Alt + R` → `ř`
+- `Alt + S` → `š`, `Alt + T` → `ť`, `Alt + Z` → `ž`
+- Capital variants with `Alt + Shift + [Letter]`
+
+### 🇷🇺 Russian
+- `Alt + E` → `є` (Ukrainian-style E)
+- `Alt + I` → `і` (Ukrainian-style I)
+- Capital variants with `Alt + Shift + [Letter]`
+
+> **Note:** Alt combinations map to base character positions in the English QWERTY layout for cross-layout compatibility.
+
+## Contributing
+
+This project is open for contributions! For detailed information on how to contribute:
+
+- 🤝 **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute, report bugs, and submit features
+- 📚 **[Development Guide](docs/DEVELOPMENT.md)** - Setup, building, testing, and project architecture
+
+Quick start for contributors:
+```bash
+git clone https://github.com/koenigstag/node-layout-switcher.git
+cd node-layout-switcher
+npm install
+npm run build
+npm test
+```
 
 ## Installation
 
@@ -150,43 +199,29 @@ Each language has its own dictionary file in `assets/dictionaries/` that maps ke
 
 #### Contribution is welcome to add more languages and layouts! Just create a new dictionary file or edit an existing one in the [`dictionaries`](assets/dictionaries/) folder and update the [`config.json`](assets/config.json) accordingly.
 
-## Development
+## Testing
 
-### How to Contribute
+For detailed testing information, see [Testing Documentation](docs/TESTING.md).
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Modify the README.md or Docs to reflect your changes
-6. Commit your changes with a clear message
-7. Submit a pull request with a description of your changes
-8. Ensure your code passes linting and tests
+Quick test commands:
+- `npm test` - Run comprehensive test suite
+- `npm run test:full` - Run all tests including Ukrainian real-world scenarios
 
-### Build
+## Development & Contributing
+
+For development setup, building, and contributing guidelines:
+
+- 📚 **[Development Guide](docs/DEVELOPMENT.md)** - Setup, building, testing, and project architecture
+- 🤝 **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute, report bugs, and submit features
+- 🧪 **[Testing Documentation](docs/TESTING.md)** - Comprehensive testing information
+
+Quick start for developers:
 ```bash
+git clone https://github.com/koenigstag/node-layout-switcher.git
+cd node-layout-switcher
+npm install
 npm run build
-```
-
-### Start built application
-```bash
-npm start
-```
-
-### Project Structure
-```
-├── src/
-│   ├── index.ts          # Main entry point
-│   ├── config.ts         # Configuration management
-│   ├── keyboard.ts       # Keyboard monitoring
-│   ├── actions.ts        # Text conversion actions
-│   ├── utils.ts          # Utility functions
-│   ├── types.ts          # TypeScript type definitions
-│   └── constants.ts      # Application constants
-├── assets/
-│   ├── config.json       # Main configuration
-│   └── dictionaries/     # Language layout dictionaries
-└── dist/                 # Compiled JavaScript files
+npm test
 ```
 
 ## Dependencies
@@ -199,93 +234,6 @@ npm start
 
 - Node.js 18+
 - Windows/macOS/Linux
-
-## Development
-
-### Getting Started
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/koenigstag/node-layout-switcher.git
-   cd node-layout-switcher
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Build the project**:
-   ```bash
-   npm run build
-   ```
-
-4. **Run tests**:
-   ```bash
-   npm run test:full
-   ```
-
-### Development Scripts
-
-- `npm run build` - Build TypeScript to JavaScript
-- `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
-- `npm run test:full` - Run all tests
-- `npm run ci:local` - Run local CI simulation
-- `npm run check` - Run full quality check (lint + format + build)
-
-### Code Quality
-
-This project uses:
-- **TypeScript** for type safety
-- **ESLint** for code linting
-- **Prettier** for code formatting
-- **Automated testing** with comprehensive test suites
-- **GitHub Actions** for CI/CD
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run quality checks: `npm run ci:local`
-5. Commit your changes: `git commit -m 'feat: add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
-### Continuous Integration
-
-The project uses GitHub Actions for:
-- **Automated testing** on multiple Node.js versions (18, 20, 22)
-- **Code quality checks** (ESLint, Prettier, TypeScript compilation)
-- **Security audits** and dependency updates
-- **Automated releases** when tags are pushed
-- **Pull request validation** with comprehensive checks
-
-### Release Process
-
-To create a new release:
-```bash
-# Patch release (bug fixes)
-npm run release:patch
-
-# Minor release (new features)
-npm run release:minor
-
-# Major release (breaking changes)
-npm run release:major
-```
-
-This will automatically:
-1. Update package.json version
-2. Create a git tag
-3. Push changes to GitHub
-4. Trigger automated release workflow
-5. Publish to npm (if configured)
-
-For detailed setup instructions, see [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md).
 
 ## License
 
