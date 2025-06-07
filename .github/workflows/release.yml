@@ -41,7 +41,7 @@ jobs:
             LICENSE
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             node-layout-switcher-${{ github.ref_name }}.tar.gz

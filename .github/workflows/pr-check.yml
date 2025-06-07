@@ -23,8 +23,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install jq for JSON validation
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Validate package.json
-        run: npm run build --dry-run || echo "Package validation passed"
+        run: |
+          echo "Validating package.json structure..."
+          jq empty package.json && echo "✅ package.json is valid JSON"
 
       - name: Run ESLint with detailed output
         run: npm run lint
