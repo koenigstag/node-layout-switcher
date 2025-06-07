@@ -7,7 +7,7 @@ The idea was inspired by the [Punto Switcher](https://ru.wikipedia.org/wiki/Punt
 ## Features
 
 - 🔄 **Automatic text conversion** between different keyboard layouts
-- 🌍 **Multi-language support**: English, Russian, Ukrainian, German, French, Czech
+- 🌍 **Multi-language support**: English, Russian, Ukrainian, German, French, Czech, Polish
 - 🔥 **Hotkey activation**: Convert selected text with customizable key combinations
 - 📋 **Clipboard integration**: Seamless text replacement using system clipboard
 - ⚙️ **Configurable**: Easy configuration through JSON files
@@ -87,21 +87,27 @@ npm start
 - `langRegexps`: Object containing regex patterns to detect language of selected text.
 - `keyBindings`: Object defining hotkeys for text specific actions. Each key maps to an action and a description.
 - `dictionaryPaths`: Object mapping language codes to their respective dictionary file paths.
-  - Each dictionary should store key-value pairs.
-    - Key: Code for the char in the QWERTY layout structure (e.g., `KeyQ` or `KeyAShifted`, independent of language). DVORAK dictionary should also use the same keys as QWERTY ones.
-    - Value: Corresponding character (e.g., `q` or `A` for English, and `й` or `Ф` for Russian language).
-    - Example for Russian dictionary:
+  - Each dictionary stores keyboard layout information using arrays for each row:
+    - `numberRow` / `numberRowShifted`: Arrays for number row characters (normal and shifted)
+    - `topRow` / `topRowShifted`: Arrays for top letter row (QWERTY row)
+    - `middleRow` / `middleRowShifted`: Arrays for middle letter row (ASDF row)
+    - `bottomRow` / `bottomRowShifted`: Arrays for bottom letter row (ZXCV row)
+    - `keyMapping`: Object mapping physical key codes to array indices
+    - Example for English dictionary:
       ```json
       {
-        "KeyQ": "й",
-        "KeyQShifted": "Й",
-        "KeyA": "ф",
-        "KeyAShifted": "Ф"
+        "numberRow": ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "\\"],
+        "topRow": ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]"],
+        "middleRow": ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'"],
+        "bottomRow": ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/"],
+        "keyMapping": {
+          "KeyQ": 0, "KeyW": 1, "KeyE": 2, "KeyR": 3
+        }
       }
       ```
 
 ### Example Configuration
-Here is an example of a valid `config.json` file that supports English and Russian languages with QWERTY layout:
+Here is a basic example of a valid `config.json` file that supports English and Russian languages with QWERTY layout:
 
 ```json
 {

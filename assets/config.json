@@ -18,7 +18,7 @@
     "uk": "./dictionaries/uk.qwerty.json",
     "de": "./dictionaries/de.qwertz.json",
     "fr": "./dictionaries/fr.azerty.json",
-    "cz": "./dictionaries/cz.qwerty.json",
+    "cz": "./dictionaries/cz.qwertz.json",
     "pl": "./dictionaries/pl.qwerty.json"
   },
   "keyBindings": {

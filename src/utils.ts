@@ -1,20 +1,50 @@
 import clipboardy from 'clipboardy';
 import { keyboard, Key } from '@nut-tree-fork/nut-js';
-import { Dict, Lang } from './types';
+import { Dict, Lang, NewLayoutDict } from './types';
 import config, { configDirectory } from './config';
 import { selectedLayoutsList } from './constants';
 import fs from 'fs';
 import path from 'path';
 
-export function buildCharToKey(layout: Dict) {
-  const map: Dict = {};
-  for (const [key, val] of Object.entries(layout)) {
-    map[val] = key;
-  }
+export function buildCharToKey(layout: NewLayoutDict) {
+  const map: Record<string, { row: string; index: number; shifted: boolean }> = {};
+  
+  // Mapping for number row
+  layout.numberRow.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'number', index, shifted: false };
+  });
+  layout.numberRowShifted.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'number', index, shifted: true };
+  });
+  
+  // Mapping for top row
+  layout.topRow.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'top', index, shifted: false };
+  });
+  layout.topRowShifted.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'top', index, shifted: true };
+  });
+  
+  // Mapping for middle row
+  layout.middleRow.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'middle', index, shifted: false };
+  });
+  layout.middleRowShifted.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'middle', index, shifted: true };
+  });
+  
+  // Mapping for bottom row
+  layout.bottomRow.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'bottom', index, shifted: false };
+  });
+  layout.bottomRowShifted.forEach((char: string, index: number) => {
+    if (char) map[char] = { row: 'bottom', index, shifted: true };
+  });
+  
   return map;
 }
 
-export async function getDictionary(lang: Lang): Promise<Dict> {
+export async function getDictionary(lang: Lang): Promise<NewLayoutDict> {
   const dictPath = config.dictionaryPaths[lang];
 
   if (!dictPath) {
@@ -33,7 +63,7 @@ export async function getDictionary(lang: Lang): Promise<Dict> {
 
   const json = await fs.promises.readFile(filePath, 'utf-8');
 
-  const dict: Dict = JSON.parse(json);
+  const dict: NewLayoutDict = JSON.parse(json);
 
   if (typeof dict !== 'object' || dict === null) {
     throw new Error(`Invalid dictionary format for language: ${lang}`);
@@ -62,20 +92,44 @@ export function detectLayoutKey(text: string): Lang | undefined {
 
 export function remapText(
   text: string,
-  fromLayout: Dict,
-  toLayout: Dict,
-  fromCharToKey: Dict
+  fromLayout: NewLayoutDict,
+  toLayout: NewLayoutDict,
+  fromCharToKey: Record<string, { row: string; index: number; shifted: boolean }>
 ) {
   return [...text]
     .map((ch) => {
       const isUpper = ch === ch.toUpperCase() && ch !== ch.toLowerCase();
       const lowerChar = ch.toLowerCase();
-      const key = fromCharToKey[lowerChar];
-      if (!key) return ch;
+      
+      // Find character in source layout
+      const charInfo = fromCharToKey[lowerChar] || fromCharToKey[ch];
+      if (!charInfo) return ch;
 
-      let mapped = toLayout[key] || ch;
-      if (isUpper) mapped = mapped.toUpperCase();
-      return mapped;
+      // Get character from target layout at the same position
+      let mapped: string;
+      const { row, index, shifted } = charInfo;
+      
+      // Determine if we need shifted version based on original case or if it was already shifted
+      const needShifted = isUpper || shifted;
+      
+      switch (row) {
+        case 'number':
+          mapped = needShifted ? toLayout.numberRowShifted[index] : toLayout.numberRow[index];
+          break;
+        case 'top':
+          mapped = needShifted ? toLayout.topRowShifted[index] : toLayout.topRow[index];
+          break;
+        case 'middle':
+          mapped = needShifted ? toLayout.middleRowShifted[index] : toLayout.middleRow[index];
+          break;
+        case 'bottom':
+          mapped = needShifted ? toLayout.bottomRowShifted[index] : toLayout.bottomRow[index];
+          break;
+        default:
+          return ch;
+      }
+      
+      return mapped || ch;
     })
     .join('');
 }
