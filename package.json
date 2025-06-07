@@ -4,8 +4,18 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p . && echo \"Build successful!\"",
+    "test": "node test/test-conversion.js",
+    "test:conversion": "node test/test-conversion.js",
+    "test:dictionaries": "node test/test-all-dictionaries.js",
+    "test:integration": "npm run build && node test/test-integration.js",
+    "test:full": "npm run test:conversion && npm run test:dictionaries && npm run test:integration",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts",
+    "check": "npm run lint && npm run format:check && npm run build",
+    "precommit": "npm run check && npm run test:full"
   },
   "keywords": [
     "keyboard",
@@ -29,6 +39,12 @@
   },
   "devDependencies": {
     "@types/node": "^22.15.30",
+    "@typescript-eslint/eslint-plugin": "^8.33.1",
+    "@typescript-eslint/parser": "^8.33.1",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "prettier": "^3.5.3",
     "typescript": "^5.8.3"
   }
 }

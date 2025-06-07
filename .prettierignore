@@ -1,0 +1,7 @@
+dist/
+node_modules/
+*.log
+*.js
+package-lock.json
+eslint.config.js
+.prettierrc.json
