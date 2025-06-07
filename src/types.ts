@@ -1,6 +1,13 @@
 export type Lang = 'en' | 'ru' | 'uk' | 'de' | 'fr' | 'cz' | 'pl';
 
-export type Dict = Record<string, string>;
+export type CharInfo = {
+  row: string;
+  index: number;
+  shifted: boolean;
+  altCombination?: boolean;
+};
+
+export type CharMap = Record<string, CharInfo>;
 
 export type NewLayoutDict = {
   numberRow: string[];
@@ -12,6 +19,7 @@ export type NewLayoutDict = {
   bottomRow: string[];
   bottomRowShifted: string[];
   keyMapping: Record<string, number>;
+  altCombinations?: Record<string, string>;
 };
 
 export type Config = {

@@ -1,14 +1,14 @@
 import clipboardy from 'clipboardy';
 import { keyboard, Key } from '@nut-tree-fork/nut-js';
-import { Lang, NewLayoutDict } from './types';
+import { CharMap, Lang, NewLayoutDict } from './types';
 import config, { configDirectory } from './config';
 import { selectedLayoutsList } from './constants';
 import fs from 'fs';
 import path from 'path';
+import enQwertyLayout from '../assets/dictionaries/en.qwerty.json';
 
-export function buildCharToKey(layout: NewLayoutDict) {
-  const map: Record<string, { row: string; index: number; shifted: boolean }> =
-    {};
+export function buildCharToKey(layout: NewLayoutDict, disableAlt?: boolean) {
+  const map: CharMap = {};
 
   // Mapping for number row
   layout.numberRow.forEach((char: string, index: number) => {
@@ -41,6 +41,21 @@ export function buildCharToKey(layout: NewLayoutDict) {
   layout.bottomRowShifted.forEach((char: string, index: number) => {
     if (char) map[char] = { row: 'bottom', index, shifted: true };
   });
+
+  // Mapping for Alt combinations (special case)
+  if (layout.altCombinations && !disableAlt) {
+    // Build mapping for English QWERTY layout (reuse the same logic)
+    const qwertyCharToKey = buildCharToKey(enQwertyLayout, true);
+
+    Object.entries(layout.altCombinations).forEach(([baseChar, altChar]) => {
+      // Find position of baseChar in English QWERTY layout
+      const keyPosition = qwertyCharToKey[baseChar];
+
+      if (keyPosition) {
+        map[altChar] = { ...keyPosition, altCombination: true };
+      }
+    });
+  }
 
   return map;
 }
@@ -95,10 +110,7 @@ export function remapText(
   text: string,
   fromLayout: NewLayoutDict,
   toLayout: NewLayoutDict,
-  fromCharToKey: Record<
-    string,
-    { row: string; index: number; shifted: boolean }
-  >,
+  fromCharToKey: CharMap,
 ) {
   return [...text]
     .map(ch => {
@@ -108,6 +120,27 @@ export function remapText(
       // Find character in source layout
       const charInfo = fromCharToKey[lowerChar] || fromCharToKey[ch];
       if (!charInfo) return ch;
+
+      // Handle Alt combinations - if source character is an Alt combination,
+      // try to find the equivalent Alt combination in target layout
+      if (charInfo.altCombination) {
+        if (toLayout.altCombinations) {
+          // Find which base character this alt char corresponds to in source
+          const sourceAltEntry = Object.entries(
+            fromLayout.altCombinations || {},
+          ).find(([, altChar]) => altChar === ch || altChar === lowerChar);
+
+          if (sourceAltEntry) {
+            const [sourceBaseChar] = sourceAltEntry;
+            // Check if target layout has alt combination for the same base char
+            const targetAltChar = toLayout.altCombinations[sourceBaseChar];
+            if (targetAltChar) {
+              return isUpper ? targetAltChar.toUpperCase() : targetAltChar;
+            }
+          }
+        }
+        // If no alt combination found in target, fall back to regular mapping
+      }
 
       // Get character from target layout at the same position
       let mapped: string;
@@ -140,6 +173,11 @@ export function remapText(
         default:
           return ch;
       }
+
+      // Alt combinations are only used for direct conversion (e.g., ґ → u)
+      // We don't automatically convert back (u → ґ) to avoid unwanted substitutions
+      // This makes the behavior predictable: Alt chars go to their base positions,
+      // but base positions don't automatically become Alt chars
 
       return mapped || ch;
     })
