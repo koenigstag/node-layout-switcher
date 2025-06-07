@@ -1,8 +1,9 @@
 import { Lang } from './types';
 import { uniq } from './utils';
 import config from './config';
+import packageJson from '../package.json';
 
-export const version = '1.2.0';
+export const version = packageJson.version;
 
 export const selectedLayoutsList: [Lang, Lang] = uniq(
   config.selectedTuple,
