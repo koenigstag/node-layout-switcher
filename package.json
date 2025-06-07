@@ -1,0 +1,34 @@
+{
+  "name": "node-layout-switcher",
+  "version": "1.1.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "keyboard",
+    "layout",
+    "switcher",
+    "nodejs",
+    "automation",
+    "punto"
+  ],
+  "author": "koenigstag",
+  "license": "MIT",
+  "description": "A Node.js utility for automatic keyboard layout switching and text conversion between different languages and layouts (QWERTY, DVORAK). Supports English, Russian, Ukrainian, German, French, and Czech layouts with hotkey-based text replacement.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koenigstag/node-layout-switcher.git"
+  },
+  "dependencies": {
+    "@nut-tree-fork/nut-js": "^4.2.6",
+    "clipboardy": "^4.0.0",
+    "node-global-key-listener": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "typescript": "^5.8.3"
+  }
+}

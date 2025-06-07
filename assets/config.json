@@ -1,0 +1,30 @@
+{
+  "selectedTuple": [
+    "en",
+    "ru"
+  ],
+  "langRegexps": {
+    "uk": "[а-яіїєґ]",
+    "ru": "[а-яё]",
+    "de": "[a-zäöüß]",
+    "fr": "[a-zàâäçèéêëîïôùûüÿñ]",
+    "cz": "[a-záčďéěíňóřšťúůýž]",
+    "pl": "[a-ząćęłńóśźż]",
+    "en": "[a-z]"
+  },
+  "dictionaryPaths": {
+    "en": "./dictionaries/en.qwerty.json",
+    "ru": "./dictionaries/ru.qwerty.json",
+    "uk": "./dictionaries/uk.qwerty.json",
+    "de": "./dictionaries/de.qwertz.json",
+    "fr": "./dictionaries/fr.azerty.json",
+    "cz": "./dictionaries/cz.qwerty.json",
+    "pl": "./dictionaries/pl.qwerty.json"
+  },
+  "keyBindings": {
+    "Ctrl+Shift+P": {
+      "action": "convertSelectedText",
+      "description": "Press ${keyBinding} to convert selected text."
+    }
+  }
+}
